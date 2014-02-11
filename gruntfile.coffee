@@ -7,7 +7,7 @@ module.exports = (grunt) ->
   grunt.initConfig
     bower_concat:
       all:
-        dest: 'public/vendor.js'
+        dest: 'test/assets/vendor.js'
         dependencies:
           'chai-jquery': ['jquery','chai']
         bowerOptions:
@@ -16,8 +16,16 @@ module.exports = (grunt) ->
     browserify:
       app:
         files:
-          'public/all.js': [
-            'app/**/*.coffee'
+          'dist/plugin.js': [
+            'src/**/*.coffee'
+          ]
+        options:
+          transform: ['coffeeify']
+
+      sample:
+        files:
+          'sample_proj/sample.js': [
+            'sample_proj/**/*.coffee'
           ]
         options:
           transform: ['coffeeify']
@@ -28,7 +36,6 @@ module.exports = (grunt) ->
             'test/**/*.coffee'
           ]
         options:
-
           transform: ['coffeeify']
 
     mocha_phantomjs:
@@ -38,16 +45,15 @@ module.exports = (grunt) ->
 
     esteWatch:
       options:
-        dirs: ['app/**/', 'test/**/']
+        dirs: ['src/**/', 'test/**/']
       coffee: (filepath) ->
-        console.log filepath
         ['build', 'test']
 
     connect:
       app:
         options:
           port: 8888
-          base: 'public'
+          base: '.'
 
   grunt.registerTask "build", ["bower_concat", "browserify"]
   grunt.registerTask "default", ["build"]
